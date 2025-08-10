@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VisionCode (Fusionado)</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Barra de Título Personalizada (de V1) -->
+    <header id="title-bar">
+      <div class="title-bar-drag-region">
+        <div class="title-logo">
+          <img src="icon.svg" alt="VisionCode Logo" />
+          <span>VisionCode</span>
+        </div>
+      </div>
+      <div class="title-bar-controls">
+        <button id="minimize-btn" class="control-btn" title="Minimizar">
+          <i class="fas fa-window-minimize"></i>
+        </button>
+        <button id="maximize-btn" class="control-btn" title="Maximizar">
+          <i class="far fa-window-maximize"></i>
+        </button>
+        <button id="close-btn" class="control-btn" title="Cerrar">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Contenedor Principal de la App (de V1) -->
+    <main class="app-container">
+      <!-- Panel de Herramientas (Contenido de V2) -->
+      <aside id="toolbox" class="panel">
+        <div class="panel-header">
+          <h2><i class="fas fa-toolbox"></i> Herramientas</h2>
+          <button
+            class="block-ctrl-btn"
+            id="collapse-all-btn"
+            title="Colapsar todo"
+          >
+            <i class="fas fa-chevron-up"></i>
+          </button>
+        </div>
+        <div class="panel-content">
+          <!-- CONTENIDO DE LA TOOLBOX DE V2 VA AQUÍ -->
+          <div class="toolbox-section">
+            <h3>
+              <i class="fas fa-code"></i> Sentencias<i
+                class="fas fa-chevron-down"
+              ></i>
+            </h3>
+            <div class="section-content">
+              <!-- Todos los bloques de sentencias de V2 -->
+              <div
+                class="block-template block-start"
+                draggable="true"
+                data-type="start"
+              >
+                Inicio
+              </div>
+              <br />
+              <div
+                class="block-template block-end"
+                draggable="true"
+                data-type="end"
+              >
+                Fin
+              </div>
+              <br />
+              <div
+                class="block-template block-print"
+                draggable="true"
+                data-type="print"
+              >
+                Imprimir (simple)<span
+                  class="input-socket value-input"
+                  data-accepts="value"
+                  >[valor]</span
+                >
+              </div>
+              <br />
+              <div
+                class="block-template block-alert"
+                draggable="true"
+                data-type="alert"
+              >
+                Alerta<span
+                  class="input-socket value-input"
+                  data-accepts="value"
+                  >[mensaje]</span
+                >
+              </div>
+              <br />
+              <div
+                class="block-template block-print-advanced"
+                draggable="true"
+                data-type="print_advanced"
+              >
+                Imprimir (avanzado)<button
+                  type="button"
+                  class="add-segment-btn"
+                >
+                  +
+                </button>
+                <div class="print-segments-container"></div>
+              </div>
+              <br />
+              <div
+                class="block-template block-variable-set"
+                draggable="true"
+                data-type="variable_set"
+              >
+                Variable
+                <input
+                  type="text"
+                  value="x"
+                  placeholder="Nombre"
+                  class="block-input var-name"
+                />
+                =
+                <span class="input-socket value-input" data-accepts="value"
+                  >[valor]</span
+                >
+              </div>
+              <br />
+              <div
+                class="block-template block-read-input"
+                draggable="true"
+                data-type="read_input"
+              >
+                Leer en var
+                <input
+                  type="text"
+                  value="dato"
+                  placeholder="Nombre Var"
+                  class="block-input var-name"
+                />
+              </div>
+              <br />
+              <div
+                class="block-template block-read-multiple"
+                draggable="true"
+                data-type="read_multiple"
+              >
+                Leer Múltiple
+                <button type="button" class="add-var-field-btn">+</button>
+                <div class="read-vars-container">
+                  <input
+                    type="text"
+                    class="block-input var-name-multi"
+                    placeholder="var1"
+                  />
+                </div>
+                <small>(separar entrada con espacios)</small>
+              </div>
+            </div>
+          </div>
+          <div class="toolbox-section">
+            <h3>
+              <i class="fas fa-sitemap"></i> Controles<i
+                class="fas fa-chevron-down"
+              ></i>
+            </h3>
+            <div class="section-content">
+              <!-- Todos los bloques de control de V2 -->
+              <div
+                class="block-template block-control-if"
+                draggable="true"
+                data-type="control_if"
+              >
+                Si
+                <span
+                  class="input-socket condition-input"
+                  data-accepts="boolean"
+                  >[condición]</span
+                >
+                Entonces
+                <div
+                  class="statement-container drop-area"
+                  data-accepts="statement"
+                  data-branch-name="then"
+                ></div>
+              </div>
+              <br />
+              <div
+                class="block-template block-control-if-else"
+                draggable="true"
+                data-type="control_if_else"
+              >
+                Si
+                <span
+                  class="input-socket condition-input"
+                  data-accepts="boolean"
+                  >[condición]</span
+                >
+                Entonces
+                <div
+                  class="statement-container drop-area"
+                  data-accepts="statement"
+                  data-branch-name="then"
+                ></div>
+                Sino
+                <div
+                  class="statement-container drop-area"
+                  data-accepts="statement"
+                  data-branch-name="else"
+                ></div>
+              </div>
+              <br />
+              <div
+                class="block-template block-control-for"
+                draggable="true"
+                data-type="control_for"
+              >
+                Repetir con
+                <input type="text" value="i" class="block-input var-name" />
+                desde
+                <span class="input-socket value-input" data-accepts="number"
+                  >[1]</span
+                >
+                hasta
+                <span class="input-socket value-input" data-accepts="number"
+                  >[10]</span
+                >
+                sumando
+                <span class="input-socket value-input" data-accepts="number"
+                  >[1]</span
+                >
+                <div
+                  class="statement-container drop-area"
+                  data-accepts="statement"
+                  data-branch-name="loop"
+                ></div>
+              </div>
+              <br />
+              <div
+                class="block-template block-control-while"
+                draggable="true"
+                data-type="control_while"
+              >
+                Mientras
+                <span
+                  class="input-socket condition-input"
+                  data-accepts="boolean"
+                  >[condición]</span
+                >
+                Hacer
+                <div
+                  class="statement-container drop-area"
+                  data-accepts="statement"
+                  data-branch-name="loop"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div class="toolbox-section">
+            <h3>
+              <i class="fas fa-calculator"></i> Valores<i
+                class="fas fa-chevron-down"
+              ></i>
+            </h3>
+            <div class="section-content">
+              <!-- Todos los bloques de valores de V2 -->
+              <div
+                class="block-template value-block block-literal-text"
+                draggable="true"
+                data-type="literal_text"
+              >
+                Texto
+                <input
+                  type="text"
+                  value="hola"
+                  class="block-input literal-text-input"
+                />
+              </div>
+              <div
+                class="block-template value-block block-literal-number"
+                draggable="true"
+                data-type="literal_number"
+              >
+                Número
+                <input
+                  type="number"
+                  value="0"
+                  class="block-input literal-number-input"
+                />
+              </div>
+              <div
+                class="block-template value-block block-literal-boolean"
+                draggable="true"
+                data-type="literal_boolean"
+              >
+                Booleano
+                <select class="block-select boolean-value-select">
+                  <option value="true">Verdadero</option>
+                  <option value="false">Falso</option>
+                </select>
+              </div>
+              <div
+                class="block-template value-block block-variable-get"
+                draggable="true"
+                data-type="variable_get"
+              >
+                Valor de
+                <input
+                  type="text"
+                  value="x"
+                  placeholder="Nombre"
+                  class="block-input var-name"
+                />
+              </div>
+              <div
+                class="block-template value-block block-op-arithmetic"
+                draggable="true"
+                data-type="op_arithmetic"
+              >
+                <span class="input-socket value-input" data-accepts="number"
+                  >[num]</span
+                ><select class="operator block-select">
+                  <option value="+">+</option>
+                  <option value="-">-</option>
+                  <option value="*">*</option>
+                  <option value="/">/</option>
+                  <option value="%">%</option></select
+                ><span class="input-socket value-input" data-accepts="number"
+                  >[num]</span
+                >
+              </div>
+              <div
+                class="block-template value-block block-op-comparison"
+                draggable="true"
+                data-type="op_comparison"
+              >
+                <span class="input-socket value-input" data-accepts="value"
+                  >[val]</span
+                ><select class="operator block-select">
+                  <option value="==">==</option>
+                  <option value="!=">!=</option>
+                  <option value="<"><</option>
+                  <option value="<="><=</option>
+                  <option value=">">></option>
+                  <option value=">=">>=</option></select
+                ><span class="input-socket value-input" data-accepts="value"
+                  >[val]</span
+                >
+              </div>
+              <div
+                class="block-template value-block block-op-logical"
+                draggable="true"
+                data-type="op_logical"
+              >
+                <span class="input-socket value-input" data-accepts="boolean"
+                  >[bool]</span
+                ><select class="operator block-select">
+                  <option value="&&">Y (&&)</option>
+                  <option value="||">O (||)</option></select
+                ><span class="input-socket value-input" data-accepts="boolean"
+                  >[bool]</span
+                >
+              </div>
+              <div
+                class="block-template value-block block-op-not"
+                draggable="true"
+                data-type="op_not"
+              >
+                NO
+                <span class="input-socket value-input" data-accepts="boolean"
+                  >[bool]</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Área Central (de V1) -->
+      <div class="main-area">
+        <!-- Barra de Herramientas del Workspace (de V1) -->
+        <div class="workspace-toolbar">
+          <!-- Los botones de Ejecutar/Limpiar se movieron a la consola para seguir el layout de V2 -->
+          <button
+            id="clear-btn"
+            class="toolbar-btn danger"
+            title="Limpiar todo el área de trabajo"
+          >
+            <i class="fas fa-trash"></i> Limpiar
+          </button>
+          <div class="separator"></div>
+          <button id="zoom-in-btn" class="toolbar-btn" title="Acercar">
+            <i class="fas fa-search-plus"></i>
+          </button>
+          <button id="zoom-out-btn" class="toolbar-btn" title="Alejar">
+            <i class="fas fa-search-minus"></i>
+          </button>
+          <button
+            id="zoom-reset-btn"
+            class="toolbar-btn"
+            title="Restaurar Zoom"
+          >
+            <span id="zoom-level">100%</span>
+          </button>
+        </div>
+
+        <!-- Wrapper para el Workspace (Necesario para el Pan/Zoom) -->
+        <div id="workspace-wrapper">
+          <!-- El antiguo #workspace ahora es el contenedor de los bloques para que pueda moverse/escalarse -->
+          <div
+            id="workspace-content"
+            class="drop-area"
+            data-accepts="statement"
+          >
+            <div class="empty-workspace">
+              <i class="fas fa-hand-point-left"></i>
+              <p>Arrastra bloques aquí para comenzar</p>
+            </div>
+            <!-- Los bloques se añadirán aquí dinámicamente -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Lateral Derecho (de V1, con contenido de V2) -->
+      <aside id="side-panel" class="panel">
+        <!-- Pestañas para Código y Consola -->
+        <div class="tabs">
+          <button class="tab-btn" data-tab="code-preview-tab">
+            Código
+          </button>
+          <button class="tab-btn active" data-tab="console-tab">Consola</button>
+        </div>
+
+        <!-- Contenido de la Pestaña de Código -->
+        <div id="code-preview-tab" class="tab-content">
+          <pre><code class="language-javascript">// El código JavaScript aparecerá aquí...</code></pre>
+        </div>
+
+        <!-- Contenido de la Pestaña de Consola -->
+        <div id="console-tab" class="tab-content active">
+          <div id="console-output"></div>
+          <div id="console-input-area" style="display: none">
+            <span id="console-prompt-prefix">> </span>
+            <input type="text" id="console-input-field" />
+          </div>
+        </div>
+
+        <!-- Botones de la Consola (Ahora fuera de las pestañas) -->
+        <div class="console-buttons">
+          <button id="runButton"><i class="fas fa-play"></i> Ejecutar</button>
+          <button id="clearConsoleButton">
+            <i class="fas fa-eraser"></i> Limpiar Consola
+          </button>
+        </div>
+      </aside>
+    </main>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>

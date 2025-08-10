@@ -1,0 +1,344 @@
+/* style.css (Fusionado y Mejorado) */
+
+/* --- FUENTES E ICONOS (FontAwesome a través de CDN en HTML) --- */
+
+/* --- VARIABLES Y ESTILOS GLOBALES (de V1) --- */
+:root {
+  --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: 'Fira Code', 'Consolas', monospace;
+  
+  --bg-dark: #1e1e1e;
+  --bg-medium: #2a2a2a;
+  --bg-light: #3c3c3c;
+  --bg-workspace: #212121; /* Fondo del área de trabajo */
+  
+  --text-primary: #d4d4d4;
+  --text-secondary: #a0a0a0;
+  --text-dark: #121212;
+  
+  --accent-primary: #3b82f6;
+  --accent-danger: #ef4444;
+  --accent-success: #22c55e;
+  
+  --border-color: #4a4a4a;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --radius: 6px;
+  --transition: all 0.2s ease-in-out;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  user-select: none;
+}
+
+/* --- BARRA DE TÍTULO (de V1) --- */
+#title-bar {
+  display: flex;
+  height: 36px;
+  background-color: var(--bg-medium);
+  border-bottom: 1px solid var(--border-color);
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.title-bar-drag-region { -webkit-app-region: drag; flex-grow: 1; height: 100%; display: flex; align-items: center; }
+.title-logo { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; /* Espacio entre el logo y el texto */
+  font-weight: 600; 
+  padding-left: 12px; /* Añade espacio a la izquierda */
+}
+
+.title-logo img {
+  height: 22px; /* Define una altura fija para el logo */
+  width: 22px;  /* Define una anchura fija para el logo */
+}
+.title-bar-controls { display: flex; }
+.control-btn {
+  width: 46px; height: 36px; border: none; background: transparent;
+  color: var(--text-secondary); transition: var(--transition); font-size: 14px;
+}
+.control-btn:hover { background-color: var(--bg-light); color: var(--text-primary); }
+#close-btn:hover { background-color: var(--accent-danger); }
+.control-btn i { font-size: 1em; }
+.fa-window-minimize { font-size: 0.8em !important; }
+
+/* --- LAYOUT PRINCIPAL (de V1) --- */
+.app-container { display: flex; height: calc(100% - 36px); }
+.panel { display: flex; flex-direction: column; background-color: var(--bg-medium); border-left: 1px solid var(--border-color); }
+#toolbox { width: 320px; border-left: none; }
+.main-area { flex-grow: 1; display: flex; flex-direction: column; }
+#side-panel { width: 400px; padding: 0; }
+
+.panel-header {
+  padding: 10px 15px; font-weight: 600;
+  background-color: var(--bg-light); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.panel-header h2 { font-size: 1em; margin: 0; }
+.panel-content { padding: 15px; overflow-y: auto; flex-grow: 1; }
+
+/* --- TOOLBOX (Estilos fusionados de V1 y V2) --- */
+#toolbox .panel-content { padding: 10px; }
+.toolbox-section { margin-bottom: 15px; }
+.toolbox-section h3 {
+  padding: 8px 12px; background: rgba(0, 0, 0, 0.1); border-radius: 4px;
+  margin-bottom: 10px; font-size: 0.9em; font-weight: 600; color: var(--text-primary);
+  display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+  border-left: 3px solid var(--accent-primary);
+}
+.toolbox-section h3 i.fa-chevron-down { transition: transform 0.3s ease; }
+.toolbox-section.collapsed h3 i.fa-chevron-down { transform: rotate(-90deg); }
+.toolbox-section.collapsed .section-content { display: none; }
+.section-content small { font-size: 0.8em; color: var(--text-secondary); display: block; margin-top: 5px; }
+
+
+/* --- ÁREA DE TRABAJO (de V1, adaptada para Pan/Zoom) --- */
+.workspace-toolbar {
+  display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+  background-color: var(--bg-medium); border-bottom: 1px solid var(--border-color); flex-shrink: 0;
+}
+.toolbar-btn {
+  background: var(--bg-light); border: 1px solid var(--border-color); color: var(--text-primary);
+  padding: 6px 12px; border-radius: var(--radius); cursor: pointer; transition: var(--transition);
+  display: flex; align-items: center; gap: 6px; font-size: 13px;
+}
+.toolbar-btn:hover { border-color: var(--accent-primary); color: white; }
+.toolbar-btn.danger { background-color: var(--accent-danger); border-color: var(--accent-danger); }
+.separator { width: 1px; height: 20px; background-color: var(--border-color); margin: 0 4px; }
+#zoom-level { min-width: 45px; text-align: center; }
+
+#workspace-wrapper {
+  flex-grow: 1; background-color: var(--bg-workspace);
+  overflow: hidden; position: relative; cursor: grab;
+}
+#workspace-wrapper:active { cursor: grabbing; }
+
+#workspace-content {
+  position: relative; /* Cambiado de absolute para que el wrapper controle el scroll */
+  transform-origin: 0 0;
+  padding: 20px; /* Un poco de espacio para no empezar pegado al borde */
+  width: max-content; /* Se ajusta al contenido */
+  min-width: 100%;
+  min-height: 100%;
+}
+.empty-workspace {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    text-align: center; color: #7f8c8d; font-size: 1.2em; opacity: 0.7;
+}
+.empty-workspace i { font-size: 3em; margin-bottom: 15px; display: block; }
+#workspace-content.drag-over { background-color: rgba(59, 130, 246, 0.1); }
+
+
+/* --- ESTILOS DE BLOQUES (de V2, adaptados a V1) --- */
+.block-template, .workspace-block {
+    padding: 12px 15px; margin-bottom: 12px; font-size: 0.95em;
+    line-height: 1.6; position: relative; color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: var(--transition); cursor: grab;
+}
+.block-template:active, .workspace-block:active { cursor: grabbing; }
+.block-template:not(.value-block), .workspace-block:not(.value-block) {
+    margin-bottom: 0;
+    padding: 14px 15px;
+    border: 1.5px solid rgba(0, 0, 0, 0.4);
+    z-index: 1;
+    overflow: visible; /* Mantenemos el overflow vertical visible por los conectores */
+
+    /* --- LÍNEAS MODIFICADAS Y AÑADIDAS PARA EL WRAPPING --- */
+    max-width: 650px;         /* 1. Mantenemos el límite de anchura */
+    display: flex;            /* 2. Activa el layout flexible para los elementos internos */
+    flex-wrap: wrap;          /* 3. Permite que los elementos internos salten de línea */
+    align-items: center;      /* 4. Alinea verticalmente los elementos de cada línea (texto, inputs, etc.) */
+    height: auto;             /* 5. Asegura que la altura del bloque se ajuste al contenido que fluye hacia abajo */
+}
+/* Protuberancia arriba */
+.workspace-block:not(.value-block):not([data-type="start"])::before {
+    content: ""; position: absolute; top: -8px; left: 20px; width: 30px; height: 15px;
+    background: inherit; border-radius: 10px 10px 0 0; border: 1.5px solid rgba(0,0,0,0.4); border-bottom: none; z-index: 2;
+}
+/* Hueco abajo (CORREGIDO PARA TEMA OSCURO) */
+.workspace-block:not(.value-block):not([data-type="end"])::after {
+    content: ""; position: absolute; bottom: -8px; left: 20px; width: 30px; height: 15px;
+    background: var(--bg-workspace); /* Usa variable de color del fondo! */
+    border-radius: 0 0 10px 10px; border: 1.5px solid rgba(0,0,0,0.4); border-top: none; z-index: 2;
+}
+.dragging { opacity: 0.7; transform: rotate(2deg); z-index: 1000; }
+
+/* Colores de bloques (de V2) */
+.block-print, .workspace-block[data-type="print"] { background: #3949ab; }
+.block-alert, .workspace-block[data-type="alert"] { background: #e74c3c; }
+.block-print-advanced, .workspace-block[data-type="print_advanced"] { background: #388e3c; }
+.block-variable-set, .workspace-block[data-type="variable_set"] { background: #f57c00; }
+.block-read-input, .workspace-block[data-type="read_input"], .block-read-multiple, .workspace-block[data-type="read_multiple"] { background: #0288d1; }
+.block-control-if, .workspace-block[data-type="control_if"], .block-control-if-else, .workspace-block[data-type="control_if_else"] { background: #d32f2f; }
+.block-control-for, .workspace-block[data-type="control_for"] { background: #7b1fa2; }
+.block-control-while, .workspace-block[data-type="control_while"] { background: #8e44ad; }
+.block-start, .workspace-block[data-type="start"] { background: #2e7d32; border-radius: 8px 8px 0 0; }
+.block-end, .workspace-block[data-type="end"] { background: #c62828; border-radius: 0 0 8px 8px; }
+
+/* Bloques de valor (de V2) */
+.value-block { color: #212121 !important; display: inline-block; padding: 6px 10px; margin: 0; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.block-literal-text, .workspace-block[data-type="literal_text"].value-block { background: #ffee58; }
+.block-literal-number, .workspace-block[data-type="literal_number"].value-block { background: #fff176; }
+.block-literal-boolean, .workspace-block[data-type="literal_boolean"].value-block { background: #81d4fa; }
+.block-variable-get, .workspace-block[data-type="variable_get"].value-block { background: #ffd54f; }
+.block-op-arithmetic, .workspace-block[data-type="op_arithmetic"].value-block { background: #81c784; }
+.block-op-comparison, .workspace-block[data-type="op_comparison"].value-block { background: #a5d6a7; }
+.block-op-logical, .workspace-block[data-type="op_logical"].value-block { background: #9b59b6; }
+.block-op-not, .workspace-block[data-type="op_not"].value-block { background: #e67e22; }
+
+/* Inputs y Sockets (de V2, adaptado) */
+.block-input, .block-select {
+    margin: 0 4px; padding: 4px 6px; border: 1px solid rgba(0,0,0,0.2); border-radius: 4px;
+    font-size: 0.95em; background-color: rgba(255,255,255,0.9); color: #333;
+}
+.input-socket {
+    display: inline-flex; align-items: center; justify-content: center;
+    background-color: rgba(0,0,0,0.2); border: 2px dashed rgba(255,255,255,0.4);
+    padding: 2px 6px; margin: 0 4px; min-width: 40px; min-height: 28px;
+    text-align: center; color: rgba(255,255,255,0.7); border-radius: 5px;
+    vertical-align: middle; transition: var(--transition);
+}
+.input-socket.drag-over-socket { outline: 2px solid #38bdf8; background: #3c3c3c; border-style: solid; }
+.statement-container {
+    background-color: rgba(0,0,0,0.1); 
+    border: 2px dashed var(--border-color);
+    padding: 15px 10px;
+    margin-top: 8px; 
+    margin-left: 20px; 
+    min-height: 40px;
+    border-radius: 6px; 
+    position: relative;
+
+    /* --- LÍNEAS AÑADIDAS PARA EL WRAPPING --- */
+    flex-basis: 100%;  /* Le dice al contenedor que ocupe todo el ancho disponible, forzándolo a una nueva línea */
+    width: 100%;       /* Asegura que realmente ocupe todo el ancho del bloque padre */
+}
+.statement-container.drag-over-container { background-color: rgba(59, 130, 246, 0.1); border-color: var(--accent-primary); }
+
+/* Controles de bloques (de V2, adaptado) */
+.block-controls { position: absolute; top: 5px; right: 5px; display: none; gap: 4px; z-index: 10; }
+.workspace-block:hover .block-controls { display: flex; }
+.block-ctrl-btn {
+    background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); color: white;
+    cursor: pointer; padding: 0; font-size: 0.8em; line-height: 1;
+    border-radius: 50%; width: 22px; height: 22px; display: flex;
+    align-items: center; justify-content: center; transition: var(--transition);
+}
+.block-ctrl-btn:hover { background-color: var(--accent-primary); }
+.block-ctrl-btn:disabled { color: #777; background: #333; cursor: not-allowed; }
+.delete-btn:hover { background-color: var(--accent-danger); }
+
+.tabs { 
+    display: flex; 
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+.tab-btn {
+  flex-grow: 1;
+  padding: 10px;
+  background: var(--bg-medium);
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  border-top: 2px solid transparent; /* Para el indicador activo */
+}
+.tab-btn.active { 
+    background: var(--bg-light); 
+    color: var(--text-primary); 
+    border-top-color: var(--accent-primary);
+}
+.tab-content { 
+    display: none; 
+    flex-grow: 1;
+    overflow-y: auto;
+    /* Usamos flexbox para que los hijos puedan crecer */
+    display: none;
+    flex-direction: column;
+}
+.tab-content.active { 
+    display: flex; /* Cambiado a flex para que el contenido se estire */
+}
+/* Contenido de la pestaña de código */
+#code-preview-tab {
+    background-color: #1f2937; /* Un fondo ligeramente distinto */
+    padding: 15px;
+}
+#code-preview-tab pre, #code-preview-tab code {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: #d4d4d4;
+  white-space: pre-wrap; /* Para que el código se ajuste */
+  word-break: break-all;
+  width: 100%;
+}
+
+/* Contenido de la pestaña de consola */
+#console-tab {
+    padding: 0; 
+    background-color: #1f2937;
+    height: 100%;
+}
+#console-output {
+    color: #e5e7eb; 
+    padding: 15px; 
+    flex: 1; 
+    overflow-y: auto;
+    font-family: var(--font-mono); 
+    white-space: pre-wrap; 
+    font-size: 0.9em;
+}
+
+/* --- PANEL DERECHO Y CONSOLA (Fusionado) --- */
+#side-panel .panel-header { border-bottom: 1px solid var(--border-color); }
+#console { padding: 0; background-color: #1f2937; height: 100%; display: flex; flex-direction: column; }
+#console-output {
+    color: #e5e7eb; padding: 15px; flex: 1; overflow-y: auto;
+    font-family: var(--font-mono); white-space: pre-wrap; font-size: 0.9em;
+}
+#console-output .log { color: #90cdf4; }
+#console-output .error { color: #f87171; }
+#console-output .success { color: #34d399; }
+#console-output .input { color: #60a5fa; }
+#console-output .alert-message { color: #f39c12; font-weight: bold; }
+
+#console-input-area { padding: 8px 15px; display: flex; align-items: center; border-top: 1px solid #4b5563; }
+#console-prompt-prefix { color: #60a5fa; margin-right: 8px; }
+#console-input-field {
+    background: transparent; border: none; color: #e5e7eb;
+    font-family: var(--font-mono); flex: 1; outline: none;
+}
+.console-buttons {
+    display: flex; gap: 10px; padding: 10px 15px;
+    background-color: var(--bg-light); border-top: 1px solid var(--border-color);
+}
+.console-buttons button {
+    flex-grow: 1; padding: 8px 15px; border: none; border-radius: 6px;
+    cursor: pointer; font-weight: 600; transition: var(--transition);
+    display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9em;
+}
+.console-buttons button#runButton { background: var(--accent-success); color: white; }
+.console-buttons button#clearConsoleButton { background: var(--bg-light); color: var(--text-primary); border: 1px solid var(--border-color); }
+.console-buttons button#clearConsoleButton:hover { border-color: var(--text-secondary); }
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+
+/* Botones dinámicos dentro de bloques */
+.add-segment-btn, .add-var-field-btn {
+    background-color: rgba(255,255,255,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.5);
+    padding: 2px 7px; margin-left: 8px; border-radius: 4px; cursor: pointer;
+}
+.print-segments-container, .read-vars-container { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
